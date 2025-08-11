@@ -7,33 +7,40 @@ import * as uuid from 'uuid';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
-   private readonly UPLOAD_DESTINATION: string;
+  private readonly UPLOAD_DESTINATION: string;
   private readonly BASE_URL_FOR_FILES: string;
+  private readonly TEMP_UPLOAD_DESTINATION: string; 
+
   constructor() {
     this.UPLOAD_DESTINATION =
       process.env.UPLOAD_DESTINATION ||
-      '/home/gyubuntu/project/media/trip_gg_uploads';
+      '/home/gyubuntu/project/media/trip_gg_uploads'; 
 
     this.BASE_URL_FOR_FILES =
       process.env.BASE_URL_FOR_FILES ||
       'https://gyubuntu.duckdns.org/trip_gg/media/';
-    this.mkdir();
+
+    // UPLOAD_DESTINATION 안에 'temp' 서브 디렉토리를 임시 저장소로 사용
+    this.TEMP_UPLOAD_DESTINATION = path.join(this.UPLOAD_DESTINATION, 'temp');
+
+    this.mkdir(this.UPLOAD_DESTINATION);
+    this.mkdir(this.TEMP_UPLOAD_DESTINATION);
   }
 
-  mkdir() {
-     try {
-      if (!fs.existsSync(this.UPLOAD_DESTINATION)) {
-        fs.mkdirSync(this.UPLOAD_DESTINATION, { recursive: true });
-        console.log(`Upload directory created: ${this.UPLOAD_DESTINATION}`);
+  private mkdir(directoryPath: string) { 
+    try {
+      if (!fs.existsSync(directoryPath)) {
+        fs.mkdirSync(directoryPath, { recursive: true });
+        console.log(`Directory created: ${directoryPath}`);
       } else {
-        console.log(`Upload directory already exists: ${this.UPLOAD_DESTINATION}`);
+        console.log(`Directory already exists: ${directoryPath}`);
       }
     } catch (err) {
       console.error(
-        `Failed to create upload directory ${this.UPLOAD_DESTINATION}:`,
+        `Failed to create directory ${directoryPath}:`,
         err,
       );
-      throw new Error(`파일 업로드 디렉토리 생성 실패: ${err.message}`);
+      throw new Error(`디렉토리 생성 실패: ${err.message}`);
     }
   }
 
@@ -41,13 +48,12 @@ export class MulterConfigService implements MulterOptionsFactory {
     const option: multer.Options = {
       storage: multer.diskStorage({
         destination: (req, file, done) => {
-          done(null, this.UPLOAD_DESTINATION);
+          done(null, this.TEMP_UPLOAD_DESTINATION); 
         },
 
         filename: (req, file, done) => {
           const ext = path.extname(file.originalname);
-          const name = uuid.v4();
-
+          const name = uuid.v4(); 
           done(null, `${name}${ext}`);
         },
       }),
@@ -58,7 +64,7 @@ export class MulterConfigService implements MulterOptionsFactory {
         if (file.mimetype.startsWith('image/')) {
           callback(null, true);
         } else {
-           callback(null, false);
+          callback(null, false); 
         }
       },
     };
@@ -66,7 +72,6 @@ export class MulterConfigService implements MulterOptionsFactory {
   }
 
   getFileUrl(filename: string): string {
-    // baseUrl 대신 BASE_URL_FOR_FILES 사용
     return `${this.BASE_URL_FOR_FILES}${filename}`;
   }
 }

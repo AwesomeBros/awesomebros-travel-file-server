@@ -12,8 +12,7 @@ export class UploaderService {
     if (!image) {
       throw new NotFoundException('해당 이미지를 찾을 수 없습니다.');
     }
-    const fileUrl = `${process.env.SERVER_URL}/uploads/temp/${image.filename}`;
-    return fileUrl;
+    return image;
   }
 
   async createImg(dto: ImageDto) {
