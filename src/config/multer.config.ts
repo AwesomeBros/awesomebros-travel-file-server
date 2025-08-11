@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MulterOptionsFactory } from '@nestjs/platform-express';
 import * as fs from 'fs';
 import * as multer from 'multer';
@@ -58,10 +58,7 @@ export class MulterConfigService implements MulterOptionsFactory {
         if (file.mimetype.startsWith('image/')) {
           callback(null, true);
         } else {
-          callback(
-            new BadRequestException('허용되지 않는 파일 형식입니다.'),
-            false,
-          );
+           callback(new Error('허용되지 않는 파일 형식입니다. (이미지 파일만 허용)'), false);
         }
       },
     };
