@@ -12,7 +12,8 @@ export class UploaderService {
     if (!image) {
       throw new NotFoundException('해당 이미지를 찾을 수 없습니다.');
     }
-    return image;
+    const fileUrl = `https://gyubuntu.duckdns.org/trip_gg/media/temp/${image.filename}`;
+    return fileUrl;
   }
 
   async createImg(dto: ImageDto) {
