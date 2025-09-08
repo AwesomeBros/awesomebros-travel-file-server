@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Param,
   Post,
   Put,
   UploadedFile,
@@ -11,7 +12,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageDto } from './dto/image.dto';
 import { UploaderService } from './uploader.service';
 
-@Controller('uploader') // API 기본 경로: /uploader
+@Controller('uploader')
 export class UploaderController {
   constructor(private readonly uploaderService: UploaderService) {}
 
@@ -21,18 +22,18 @@ export class UploaderController {
     return await this.uploaderService.uploadImage(image);
   }
 
-  @Post('create')
-  async createImg(@Body() dto: ImageDto) {
-    return this.uploaderService.createImg(dto);
+  @Post(':serviceName/create')
+  async createImg(@Param('serviceName') serviceName: string, @Body() dto: ImageDto) {
+    return this.uploaderService.createImg(serviceName, dto);
   }
 
-  @Put('update')
-  async updateImg(@Body() dto: ImageDto) {
-    return this.uploaderService.upadteImg(dto);
+  @Put(':serviceName/update')
+  async updateImg(@Param('serviceName') serviceName: string, @Body() dto: ImageDto) {
+    return this.uploaderService.updateImg(serviceName, dto);
   }
 
-  @Delete('delete')
-  async deleteImg(@Body() dto: ImageDto) {
-    return this.uploaderService.deleteImg(dto);
+  @Delete(':serviceName/delete')
+  async deleteImg(@Param('serviceName') serviceName: string, @Body() dto: ImageDto) {
+    return this.uploaderService.deleteImg(serviceName, dto);
   }
 }

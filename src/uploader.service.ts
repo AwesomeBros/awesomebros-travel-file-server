@@ -16,13 +16,13 @@ export class UploaderService {
     return fileUrl;
   }
 
-  async createImg(dto: ImageDto) {
-    const { id, serviceName, images, entity } = dto;
+  async createImg(serviceName: string, dto: ImageDto) {
+    const { id, images, entity } = dto;
     return await handleImagePersistence(id, serviceName, images ? images : [], [], entity);
   }
 
-  async upadteImg(dto: ImageDto) {
-    const { id, serviceName, images, entity, existingImages } = dto;
+  async updateImg(serviceName: string, dto: ImageDto) {
+    const { id, images, entity, existingImages } = dto;
     return await handleImagePersistence(
       id,
       serviceName,
@@ -32,8 +32,8 @@ export class UploaderService {
     );
   }
 
-  async deleteImg(dto: ImageDto) {
-    const { id, serviceName, entity } = dto;
+  async deleteImg(serviceName: string,dto: ImageDto) {
+    const { id, entity } = dto;
     await deleteImageFolder(id,serviceName, entity);
     return { success: true };
   }
