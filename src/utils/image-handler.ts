@@ -4,7 +4,7 @@ import * as path from 'path';
 
 const UPLOAD_DESTINATION = '/home/gyubuntu/project/media/uploads/';
 const TEMP_UPLOAD_DESTINATION = path.join(UPLOAD_DESTINATION, 'temp');
-const BASE_URL_FOR_FILES = 'https://gyubuntu.duckdns.org/uploads/';
+const BASE_URL_FOR_FILES = 'https://gyubuntu.duckdns.org/uploads';
 
 export async function handleImagePersistence(
   entityId: string,
@@ -48,7 +48,7 @@ export async function handleImagePersistence(
           `새 이미지 이동 성공: ${imageTempPath} -> ${finalDestinationPath}`,
         );
         finalImageUrls.push(
-          `${BASE_URL_FOR_FILES}/${serviceName}images/${entityType}/${entityId}/${actualFilename}`,
+          `${BASE_URL_FOR_FILES}/${serviceName}/images/${entityType}/${entityId}/${actualFilename}`,
         );
       } catch (error) {
         console.error(`새 이미지 이동 실패: ${imageTempPath}`, error);
