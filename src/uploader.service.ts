@@ -35,6 +35,6 @@ export class UploaderService {
   async deleteImg(serviceName: string,dto: ImageDto) {
     const { id, entity } = dto;
     await deleteImageFolder(id,serviceName, entity);
-    return { success: true };
+    return true;
   }
 }
