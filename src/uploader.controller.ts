@@ -5,7 +5,7 @@ import {
   Param,
   Post,
   Put,
-  UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -18,7 +18,7 @@ export class UploaderController {
 
   @UseInterceptors(FilesInterceptor('files'))
   @Post('images')
-  async uploadImage(@UploadedFile() images: Express.Multer.File[]) {
+  async uploadImage(@UploadedFiles() images: Express.Multer.File[]) {
     return await this.uploaderService.uploadImage(images);
   }
 
